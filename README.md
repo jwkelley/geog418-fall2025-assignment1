@@ -258,6 +258,7 @@ dev.off()
 
 
 #### Plot Your Data in a Histogram
+The text below creates a simple histogram following the same process as making a table that is described above. First an empty png file is create, next a histogram is created from your data (the example below includes some extra parameters for the histogram design), and finally printing the histogram to the png file. Examine the code and try to understand what the various components do.
 ```
 png("Output_Histogram.png")
 hist(df_year$CURRENT_SZ, breaks = 30, main = "Frequency of Wild Fire Sizes", xlab = "Size of Wild Fire (ha)") #Base R style
@@ -266,25 +267,28 @@ dev.off()
 
 
 #### Plot Your Data in a Bar Graph
+Next, we will create a bar graph showing the sum of wildfires in each month. The first step is to create a new object for each month and then assigning the sum of fires to that object. In addition, the last line of code creates a set of labels for the x-axis of the graph.
 ```
-sumMar = sum(subset(df_year, IGN_Month == "Mar")$CURRENT_SZ, na.rm = TRUE) #create new object for March
-sumApr = sum(subset(df_year, IGN_Month == "Apr")$CURRENT_SZ, na.rm = TRUE) #create new object for April
-sumMay = sum(subset(df_year, IGN_Month == "May")$CURRENT_SZ, na.rm = TRUE) #create new object for May
-sumJun = sum(subset(df_year, IGN_Month == "Jun")$CURRENT_SZ, na.rm = TRUE) #create new object for June
-sumJul = sum(subset(df_year, IGN_Month == "Jul")$CURRENT_SZ, na.rm = TRUE) #create new object for July
-sumAug = sum(subset(df_year, IGN_Month == "Aug")$CURRENT_SZ, na.rm = TRUE) #create new object for August
-sumSep = sum(subset(df_year, IGN_Month == "Sep")$CURRENT_SZ, na.rm = TRUE) #create new object for September
-months = c("Mar","Apr","May","Jun","Jul", "Aug", "Sep")  #Create labels for the bar graph
-```
-```
-png("Output_BarGraph.png") #Create an object to print the bar graph 
-barplot(c(sumMar,sumApr,sumMay, sumJun, sumJul, sumAug, sumSep), names.arg = months, 
-        main = "TITLE FOR BAR GRAPH", ylab = "AXIS TITLE", xlab = "AXIS TITLE") #Create the bar graph
-dev.off() #Print bar graph
+sumMar = sum(subset(df_year, IGN_Month == "Mar")$CURRENT_SZ, na.rm = TRUE) 
+sumApr = sum(subset(df_year, IGN_Month == "Apr")$CURRENT_SZ, na.rm = TRUE) 
+sumMay = sum(subset(df_year, IGN_Month == "May")$CURRENT_SZ, na.rm = TRUE) 
+sumJun = sum(subset(df_year, IGN_Month == "Jun")$CURRENT_SZ, na.rm = TRUE) 
+sumJul = sum(subset(df_year, IGN_Month == "Jul")$CURRENT_SZ, na.rm = TRUE) 
+sumAug = sum(subset(df_year, IGN_Month == "Aug")$CURRENT_SZ, na.rm = TRUE) 
+sumSep = sum(subset(df_year, IGN_Month == "Sep")$CURRENT_SZ, na.rm = TRUE) 
+months = c("Mar","Apr","May","Jun","Jul", "Aug", "Sep") h
 ```
 
-#Total Size by Month GGPLOT
-#LOOK FOR AND CORRECT ERRORS IN THE CODE BELOW
+
+The bar graph is printed using the familiar three-step process.
+```
+png("Output_BarGraph.png") 
+barplot(c(sumMar,sumApr,sumMay, sumJun, sumJul, sumAug, sumSep), names.arg = months, 
+        main = "TITLE FOR BAR GRAPH", ylab = "AXIS TITLE", xlab = "AXIS TITLE") #Create the bar graph
+dev.off() 
+```
+
+You can create an advanced bar graph by using the the popular ggplot library. This is a little more involved, and so we have provide comments in each line to explain a little more about what is going on in the code.
 ```
 barGraph <- df_year %>% #store graph in bar graph variable and pass data frame as first argument in next line
   group_by(IGN_Month) %>% #use data frame and group by month and pass to first argument in next line
@@ -295,7 +299,6 @@ barGraph <- df_year %>% #store graph in bar graph variable and pass data frame a
   theme_classic() + #set the theme to classic (removes background and borders etc.)
   theme(plot.title = element_text(face = "bold", hjust = 0.5), plot.caption = element_text(hjust = 0.5)) #set title to center and bold
 barGraph
-
 
 png("Output_BarGraph_GG.png")
 barGraph
