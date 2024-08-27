@@ -371,7 +371,8 @@ map_TM
 dev.off()
 ```
 
-That's it! Congratulations on completing Assignment 1.
+
+That's it! Congratulations on completing the tasks for generating the results for Assignment 1. You now need to take your outputs and present them in a document using the guidelines specified in the Assignment 1 page in Brightspace.
 
 
 
