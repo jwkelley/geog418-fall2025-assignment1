@@ -257,7 +257,8 @@ dev.off()
 ```
 
 
-#### Plot Your Data in a Histogram
+### Plot Your Data in a Histogram
+
 The text below creates a simple histogram following the same process as making a table that is described above. First an empty png file is create, next a histogram is created from your data (the example below includes some extra parameters for the histogram design), and finally printing the histogram to the png file. Examine the code and try to understand what the various components do.
 ```
 png("Output_Histogram.png")
@@ -266,7 +267,8 @@ dev.off()
 ```
 
 
-#### Plot Your Data in a Bar Graph
+### Plot Your Data in a Bar Graph
+
 Next, we will create a bar graph showing the sum of wildfires in each month. The first step is to create a new object for each month and then assigning the sum of fires to that object. In addition, the last line of code creates a set of labels for the x-axis of the graph.
 ```
 sumMar = sum(subset(df_year, IGN_Month == "Mar")$CURRENT_SZ, na.rm = TRUE) 
@@ -306,32 +308,32 @@ dev.off()
 
 ```
 
-#####
-#Creating maps
-
+### Creating Maps
+Now we get to the fun but complex part of all the cody. Making maps is not an easy task in R as there are multiple key steps that go into preparing the data into a spatial format that can be accurately mapped. Again, we provide some comments to help explain what the code is doing, but you are not expected to understand how everything works.
 
 ```
-bc <- as_Spatial(bc_neighbours()) #Get shp of BC bounds
+bc <- as_Spatial(bc_neighbours()) #Get shapefile of BC boundary
 raster::crs(bc)
-bc <- spTransform(bc, CRS("+init=epsg:4326")) #project to WGS84 geographic (Lat/Long)
-
+bc <- spTransform(bc, CRS("+init=epsg:4326")) #Project your data to WGS84 geographic (Lat/Long)
 bc <- bc[which(bc$name == "British Columbia" ),] #Extract just the BC province
 
 png("FirstMap.png")
-map(bc, fill = TRUE, col = "white", bg = "lightblue", ylim = c(40, 70)) #make map of province
-points(df_year$LONGITUDE ,df_year$LATITUDE , col = "red", pch = 16) #add fire points
+map(bc, fill = TRUE, col = "white", bg = "lightblue", ylim = c(40, 70)) #Make map of province
+points(df_year$LONGITUDE ,df_year$LATITUDE , col = "red", pch = 16) #Add fire points
 dev.off()
 ```
-#####
-#####
-#Making Maps with tm package
-#Make spatial object (Spatial points dataframe) out of data
+
+
+### Creating Maps Using the tm Package
+There are many mapping packages available in R. The tm package is a fairly accessible package that can help you take your maps to the next level, but they require a slightly different set of steps than the "map" function used above. First we define the coordinates, establish a projection and add the locations of the wildfires.
+
 ```
 coords <- df_year[, c("LONGITUDE", "LATITUDE")] #Store coordinates in new object
 crs <- CRS("+init=epsg:4326") #store the coordinate system (CRS) in a new object
-
 firePoints <- SpatialPointsDataFrame(coords = coords, data = df_year, proj4string = crs) #Make new spatial Points object using coodinates, data, and projection
-
+```
+Next we create the map.
+```
 map_TM <- tm_shape(bc) + #make the main shape
   tm_fill(col = "gray50") +  #fill polygons
   tm_shape(firePoints) +
@@ -340,6 +342,11 @@ map_TM <- tm_shape(bc) + #make the main shape
 
 map_TM
 ```
+
+
+### Calculating and Adding the Mean Centre to a Map
+This is a complex task, but by now you should be able to make sense of what the code is doing (at least at a very general level). Follow the steps below to add the mean centre to your map and try your best to explain what each line of code is doing.
+
 
 ```
 meanCenter <- data.frame(name = "Mean Center of fire points", long = mean(df_year$LONGITUDE), lat = mean(df_year$LATITUDE))
@@ -364,7 +371,7 @@ map_TM
 dev.off()
 ```
 
-
+That's it! Congratulations on completing Assignment 1.
 
 
 
