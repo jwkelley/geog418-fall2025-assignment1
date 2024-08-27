@@ -29,7 +29,23 @@ install.packages("bcmaps")
 install.packages("tmap")
 install.packages("sf")
 ```
-You will see all the packages being installed in the execution panel.
+You will see all the packages being installed in the execution panel. Note that you will only need to install packages once on your machine.
+
+Next, you will need to activate these packages by calling them into a "library". This step will need to be done each time you open R for your assignment. 
+```
+library("lubridate")
+library("e1071")
+library("gtable")
+library("grid")
+library("gridExtra")
+library("ggplot2")
+library("dplyr")
+library("bcmaps")
+library("raster")
+library("maps")
+library("tmap")
+```
+
 
 
 
