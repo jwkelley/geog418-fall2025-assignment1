@@ -68,7 +68,7 @@ df <- as.data.frame(shp)
 class(df)
 ```
 
-### Inspecting the Data
+### Inspecting and Preparing the Data
 There are several quick tools for exploring your data, which is especially handy since we cannot necessarily see the dataset like we can in a software like Excel or ArcGIS. The "name" and "head" functions allow us to see the name of the columns and the first six rows of the dataset, respectively.
 
 ```
@@ -106,59 +106,68 @@ range(df$IGN_Year)
 ```
 _What do all these outputs refer to?_
 
-
-
-
-#####
-#Clean data to appropriate year and calculate descriptive statistics
-df_year <- df[which(df$IGN_Year == 2023),] #subset only your year
-
-##Mean
-#meanPop <- mean(df$CURRENT_SZ) #This could produce a wrong value (NA) due to a single NA value in data
-#meanPop <- mean(df$CURRENT_SZ, na.rm = TRUE) #Use na.rm = TRUE to ignore NA values in calculation
-
-#Check this website for the correct day numbers of your year: https://miniwebtool.com/day-of-the-year-calculator/
-#meanSummer <- mean(subset(df_year, IGN_Day >= DDD & IGN_Day <= DDD)$FIRESIZE) #Calculate the mean fire size between July 1 and Aug 31
-#meanSummer <- mean(subset(df_year, IGN_Day >= 182 & IGN_Day <= 243)$CURRENT_SZ) #Calculate the mean fire size between July 1 (182) and Aug 31 (243)
-
+We are now going to create two separate dataframes in order to be able to compare fires from across 2024 to fires during the summer months of 2024. First we create one for the year.
+```
+df_year <- df[which(df$IGN_Year == 2023),] 
+```
+Then we create one for only the summer months. Here we use the day of the year (Jan 1 = 1 and December 31 = 365).
+```
 df_Summer <- subset(df, IGN_Day >= 182 & IGN_Day <= 243) #Make new variable to hold summer data
+```
 
+### Calculating Statistics
+You are now ready to calculate statistics. 
+
+_Mean_
+```
 meanPop <- mean(df_year$CURRENT_SZ)
 meanSummer <- mean(df_Summer$CURRENT_SZ)
+```
+_Standard Deviation_
+```
+sdPop <- sd(df_year$CURRENT_SZ, na.rm = TRUE) 
+sdSummer <- sd(df_Summer$CURRENT_SZ, na.rm = TRUE) 
+```
 
-#Standard Deviation
-sdPop <- sd(df_year$CURRENT_SZ, na.rm = TRUE) #Calculate the SD, ignoring NA values
-sdSummer <- sd(df_Summer$CURRENT_SZ, na.rm = TRUE) #Calculate the SD, ignoring NA values
-sdSummer
-
+_Mode_
+```
 #Mode
 modePop <- as.numeric(names(sort(table(df_year$CURRENT_SZ), decreasing = TRUE))[1]) #make frequency table of fire size variable and sort it in desending order and extract the first row (Most Frequent)
 modeSummer <- as.numeric(names(sort(table(df_Summer$CURRENT_SZ), decreasing = TRUE))[1]) #make frequency table of fire size variable and sort it in desending order and extract the first row (Most Frequent)
+```
 
-#Median
+_Median_
+```
 medPop <- median(df_year$CURRENT_SZ, na.rm = TRUE)
 medSummer <- median(df_Summer$CURRENT_SZ, na.rm = TRUE)
-medSummer
+```
 
-#Skewness
+_Skewness_
+```
 skewPop <- skewness(df_year$CURRENT_SZ, na.rm = TRUE)[1]
 skewSummer <- skewness(df_Summer$CURRENT_SZ, na.rm = TRUE)[1]
-skewSummer
+```
 
-#Kurtosis
+_Kurtosis_
+```
 kurtPop <- kurtosis(df_year$CURRENT_SZ, na.rm = TRUE)[1]
 kurtSummer <- kurtosis(df_Summer$CURRENT_SZ, na.rm = TRUE)[1]
-kurtSummer 
+```
 
-#CoV
+_Coefficient of Variation___
+```
 CoVPop <- (sdPop / meanPop) * 100
 CoVSummer <- (sdSummer / meanSummer) * 100
-CoVSummer
+```
 
-#Normal distribution test
+_Normal Distribution Test_
+```
 normPop_PVAL <- shapiro.test(df_year$CURRENT_SZ)$p.value
 normSummer_PVAL <- shapiro.test(df_Summer$CURRENT_SZ)$p.value
-normSummer_PVAL
+```
+
+
+
 
 #####
 #Create a table of descriptive stats
