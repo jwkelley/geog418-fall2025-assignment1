@@ -12,7 +12,24 @@ Whatever your experience is with coding, please have the confidence that will le
 
 
 ## Instructions
-ddd
+Open R Studio and create a new project and give it an appropriate name (e.g. Geog418_Assignment_1). You should see multiple panels in the interface. The top-left panel is where you create and save your code. When you run your code you will see it being executed in the bottom-left panel. Any outputs are shown in the Plots panel on the right.
+
+R has many generic functions that are built into its main download "package". However, most often you will want to use a specific function that is part of some specific package that does not come with the main download, and so you will need to install these packages onto your machine. Here is a list of packages that you will need to install for this assignment. Copy and paste this code into your R Studio editor panel. Highlight the code and select "Run"
+
+```
+install.packages("terra")
+install.packages("lubridate")
+install.packages("e1071")
+install.packages("gridExtra")
+install.packages("gtable")
+install.packages("grid")
+install.packages("ggplot2")
+install.packages("dplyr")
+install.packages("bcmaps")
+install.packages("tmap")
+install.packages("sf")
+```
+You will see all the packages being installed in the execution panel.
 
 
 
