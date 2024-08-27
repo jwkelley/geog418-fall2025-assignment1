@@ -68,17 +68,18 @@ df <- as.data.frame(shp)
 class(df)
 ```
 
+### Inspecting the Data
+There are several quick tools for exploring your data, which is especially handy since we cannot necessarily see the dataset like we can in a software like Excel or ArcGIS. The "name" and "head" functions allow us to see the name of the columns and the first six rows of the dataset, respectively.
 
-#####
-#Inspect data
-names(df) #see column names
-head(df) #see first 6 rows of data
-
-
-
-typeof(df$IGNITN_DT) #what is the data type of year?
+```
+names(df) 
+head(df) 
+```
+You can see what is the data type of each column (i.e. variable in the dataset). The "typeof" function is applied to the ignition date of the fire (the IGNITIT_DT column) in the df dataframe. The "range" function below looks at the FIRE_YEAR column and gets the range of years in the data.
+```
+typeof(df$IGNITN_DT) 
 range(df$FIRE_YEAR) #How many years of data is there?
-
+```
 
 #We will need to subset the data into an given year
 df <- subset(df, df$FIRE_YEAR == 2023)
