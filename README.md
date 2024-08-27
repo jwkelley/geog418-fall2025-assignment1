@@ -55,16 +55,18 @@ dir <- "C:/Users/Chris/OneDrive - University of Victoria/Courses/Geog 418 Spatia
 setwd(dir)
 getwd()
 ```
+*Note: it is good practice to save and run your code each time you add a line or a section of code. This way you can make sure that each chunk of code is working appropriately. 
 
+Next, you will read in the shapefile of wildfires that you downloaded from the BC Data Catalogue. You are going to create an object called "shp", and use the function "vect" to create a vector dataset in R of this shapefile. Be sure to use the same punctuation in the filename below.
+```
+shp <- vect("./prot_current_fire_points.shp") #read in shp file from current (".") working directory
+```
+Shapefiles are clunky files to work with in R, so a common practice is to transform it to a file class called a dataframe. This is a very common data class to work with in R. You should be able to understand from the code below that we are creating a new object called "df" and assigning our vector shapefile as a dataframe to this object. We call also make sure it is a dataframe by asking R to tell us what class it is.
 
-#####
-#Read in data and extract attribute table
-shp <- vect("./Data/prot_current_fire_points.shp") #read in shp file from current (".") working directory
-shp
-
-df <- as.data.frame(shp) #Extract the attribute table as a dataframe, store in variable
-class(df) #ensure new variable is a dataframe
-
+```
+df <- as.data.frame(shp) 
+class(df)
+```
 
 
 #####
