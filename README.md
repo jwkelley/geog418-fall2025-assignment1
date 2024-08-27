@@ -75,31 +75,37 @@ There are several quick tools for exploring your data, which is especially handy
 names(df) 
 head(df) 
 ```
-You can see what is the data type of each column (i.e. variable in the dataset). The "typeof" function is applied to the ignition date of the fire (the IGNITIT_DT column) in the df dataframe. The "range" function below looks at the FIRE_YEAR column and gets the range of years in the data.
+You can see what is the data type of each column (i.e. variable in the dataset). The "typeof" function is applied to the ignition date of the fire (the IGNITIT_DT column) in the df dataframe. The "range" function below looks at the FIRE_YEAR column and gets the range of years in the data. It should be clear that the "$" symbol indicates that IGNITN_DT is from the dataframe df.
 ```
 typeof(df$IGNITN_DT) 
-range(df$FIRE_YEAR) #How many years of data is there?
+range(df$FIRE_YEAR)
 ```
+_What is the data type of the IGNITIN_DT column?_
+_What is the range of years in the dataset?_
 
-#We will need to subset the data into an given year
+
+You will see that there are multiple years of data in this dataset. For this assignment you only want to use data for 2024. In the code below I use data for 2023; you need to make sure to change this for 2024. The code takes "df" and assigns it a subset of the data based on the fire year.
+
+```
 df <- subset(df, df$FIRE_YEAR == 2023)
+```
+You are going to compute descriptive statistics on the entire 2024 season as well as just the summer months (more on the summer months below). Therefore, we need to know what day and month each fire took place. Unfortunately, the date of the fire ignition is stored as a single string; we want to create an object for the Day, Month, and Year of each fire. To do this, we will first make sure that our INIGNITN_DT columns is in a Date format, then create a new column for each of these three variables and extract the appropriate information to fill these new columns. Try to read through the code to see if you can make sense of what is happening.
 
-#We will also need to know the date and the month of each fire
-df$IGNITN_DT<- as.Date(df$IGNITN_DT, format = "%Y/%m/%d") #Convert to date string
-df$IGN_Day <- yday(df$IGNITN_DT) #Make new column with day of year for the ignition date
-df$IGN_Month <- month(df$IGNITN_DT, label = TRUE, abbr = TRUE) #create new column with month of ignition
-df$IGN_Year <- year(df$IGNITN_DT) #Make new column with day of year for the ignition date
+```
+df$IGNITN_DT<- as.Date(df$IGNITN_DT, format = "%Y/%m/%d")
+df$IGN_Day <- yday(df$IGNITN_DT) 
+df$IGN_Month <- month(df$IGNITN_DT, label = TRUE, abbr = TRUE) 
+df$IGN_Year <- year(df$IGNITN_DT) 
+```
+Now you can change the range of days and years, and see what months are included in the dataset. 
 
-#Check the range of day and month
-range(df$IGN_Day) #Everything seem ok?
-unique(df$IGN_Month) #Any months seem odd?
+```
+range(df$IGN_Day) 
+unique(df$IGN_Month) 
 range(df$IGN_Year)
+```
+_What do all these outputs refer to?_
 
-##Remove values with an NA date
-#df3 <- subset(df, !is.na(df$IGNITN_DT))
-
-##Check the range of IGN Date
-#range(df$IGN_Day) #Anything odd?
 
 
 
