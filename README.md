@@ -132,9 +132,10 @@ sdSummer <- sd(df_Summer$CURRENT_SZ, na.rm = TRUE)
 _Mode_
 ```
 #Mode
-modePop <- as.numeric(names(sort(table(df_year$CURRENT_SZ), decreasing = TRUE))[1]) #make frequency table of fire size variable and sort it in desending order and extract the first row (Most Frequent)
-modeSummer <- as.numeric(names(sort(table(df_Summer$CURRENT_SZ), decreasing = TRUE))[1]) #make frequency table of fire size variable and sort it in desending order and extract the first row (Most Frequent)
+modePop <- as.numeric(names(sort(table(df_year$CURRENT_SZ), decreasing = TRUE))[1]) 
+modeSummer <- as.numeric(names(sort(table(df_Summer$CURRENT_SZ), decreasing = TRUE))[1])
 ```
+Note: This code makes a frequency table of fire size variable and sorts it in desending order and extract the first row (i.e. the most frequent value)
 
 _Median_
 ```
@@ -166,13 +167,17 @@ normPop_PVAL <- shapiro.test(df_year$CURRENT_SZ)$p.value
 normSummer_PVAL <- shapiro.test(df_Summer$CURRENT_SZ)$p.value
 ```
 
+### Creating a Table for Your Results
 
+Creating a table and inputing your results is a little tricky. Do your best to understand how this code works, but do not get stuck on understanding every single detail.
 
-
-#####
-#Create a table of descriptive stats
-
+We first create an object of the two labels that we will use in the table
+```
 samples = c("Population", "Summer") #Create an object for the labels
+```
+
+Next, we create an object that contains the statistic for the year and summer
+```
 means = c(meanPop, meanSummer) #Create an object for the means
 sd = c(sdPop, sdSummer) #Create an object for the standard deviations
 median = c(medPop, medSummer) #Create an object for the medians
@@ -181,9 +186,10 @@ skewness <- c(skewPop, skewSummer) #Create an object for the skewness
 kurtosis <- c(kurtPop, kurtSummer) #Create an object for the kurtosis
 CoV <- c(CoVPop, CoVSummer) #Create an object for the CoV
 normality <- c(normPop_PVAL, normSummer_PVAL) #Create an object for the normality PVALUE
+```
 
-##Check table values for sigfigs?
-
+We can change the number of values after the decimal to make sure that our numbers are within reason. 
+```
 means <- round(means, 3)
 sd <- round(sd, 3)
 median <- round(median, 3)
@@ -192,16 +198,18 @@ skewness <- round(skewness,3)
 kurtosis <- round(kurtosis,3)
 CoV <- round(CoV, 3)
 normality <- round(normality, 5)
+```
 
-
+Next, we will create two tables and include specific results in each. We start by creating an object for each table that contains the relevant data and output all the results into a .csv file.
+```
 data.for.table1 = data.frame(samples, means, sd, median, mode)
 data.for.table2 = data.frame(samples, skewness, kurtosis, CoV, normality)
-
 outCSV <- data.frame(samples, means, sd, median, mode, skewness, kurtosis, CoV, normality)
-write.csv(outCSV, "./FireDescriptiveStats_2020.csv", row.names = FALSE)
+write.csv(outCSV, "./FireDescriptiveStats_2023.csv", row.names = FALSE)
+```
 
-
-#Make table 1
+Next, we use several functions in R to create the first table.
+```
 table1 <- tableGrob(data.for.table1, rows = c("","")) #make a table "Graphical Object" (GrOb) 
 t1Caption <- textGrob("Table 1: CAPTION FOR YOUR TABLE", gp = gpar(fontsize = 09))
 padding <- unit(5, "mm")
@@ -213,7 +221,10 @@ table1 <- gtable_add_rows(table1,
 table1 <- gtable_add_grob(table1,
                           t1Caption, t = 1, l = 2, r = ncol(data.for.table1) + 1)
 
+```
 
+And repeat these steps for table 2.
+```
 table2 <- tableGrob(data.for.table2, rows = c("",""))
 t2Caption <- textGrob("Table 2: CAPTION FOR YOUR TABLE", gp = gpar(fontsize = 09))
 padding <- unit(5, "mm")
@@ -224,54 +235,38 @@ table2 <- gtable_add_rows(table2,
 
 table2 <- gtable_add_grob(table2,
                           t2Caption, t = 1, l = 2, r = ncol(data.for.table2) + 1)
+```
 
-
-
+To print these tables, we first add each one to a new page.
+```
 grid.arrange(table1, newpage = TRUE)
 grid.arrange(table2, newpage = TRUE)
+```
 
-#Printing a table (You can use the same setup for printing other types of objects (see ?png))
-png("Output_Table1.png") #Create an object to print the table to
+Next, we create an empty png file in our working directory, and then assign Table 1 to that png file, and then print the table by calling the "dev.off" function.
+```
+png("Output_Table1.png")
 grid.arrange(table1, newpage = TRUE)
-dev.off() #Print table
-
-png("Output_Table2.png") #Create an object to print the table to
-grid.arrange(table2, newpage = TRUE) #Create table
+dev.off() 
+```
+And repeat for Table 2
+```
+png("Output_Table2.png") 
+grid.arrange(table2, newpage = TRUE)
 dev.off()
+```
 
-#####
-#Create and Print a histogram
+
+#### Plot Your Data in a Histogram
+```
 png("Output_Histogram.png")
 hist(df_year$CURRENT_SZ, breaks = 30, main = "Frequency of Wild Fire Sizes", xlab = "Size of Wild Fire (ha)") #Base R style
 dev.off()
-
-histogram <- ggplot(df_year, aes(x = CURRENT_SZ)) + #Create new GGplot object with data attached and fire size mapped to X axis
-  geom_histogram(bins = 50, color = "black", fill = "white") + #make histogram with 30 bins, black outline, white fill
-  labs(title = "Frequency of Wild Fire Sizes", x = "Size of Wild Fire (ha)", y = "Frequency", caption = "Figure 1: Fire size histogram 2020") + #label plot, x axis, y axis
-  theme_classic() + #set the theme to classic (removes background and borders etc.)
-  theme(plot.title = element_text(face = "bold", hjust = 0.5), plot.caption = element_text(hjust = 0.5)) + #set title to center and bold
-  scale_y_continuous(breaks = seq(0, 700, by = 100)) # set y axis labels to 0 - 700 incrimenting by 100
-
-png("Output_Histogram_ggplot.png")
-histogram
-dev.off()
+```
 
 
-#LOOK FOR AND CORRECT AN ERROR IN THE CODE BELOW
-#histogram <- ggplot(df_year, aes(x = SizeOfFire)) + #Create new GGplot object with data attached and fire size mapped to X axis
-#  geom_histogram(bins = 30, color = "black", fill = "white") + #make histogram with 30 bins, black outline, white fill
-#  labs(title = "TITLE OF HISTOGRAM", x = "AXIS TITLE", y = "AXIS TITLE", caption = "Figure X: MAKE CAPTION FOR FIGURE") + #label plot, x axis, y axis
-#  theme_classic() + #set the theme to classic (removes background and borders etc.)
-#  theme(plot.title = element_text(face = "bold", hjust = 0.5), plot.caption = element_text(hjust = 0.5)) + #set title to center and bold
-#  scale_y_continuous(breaks = seq(0, 700, by = 100)) # set y axis labels to 0 - 700 incrimenting by 100
-
-#png("Output_Histogram_ggplot.png")
-#histogram
-#dev.off()
-
-#####
-#Creating bar graph
-#LOOK FOR AND CORRECT AN ERROR IN THE CODE BELOW
+#### Plot Your Data in a Bar Graph
+```
 sumMar = sum(subset(df_year, IGN_Month == "Mar")$CURRENT_SZ, na.rm = TRUE) #create new object for March
 sumApr = sum(subset(df_year, IGN_Month == "Apr")$CURRENT_SZ, na.rm = TRUE) #create new object for April
 sumMay = sum(subset(df_year, IGN_Month == "May")$CURRENT_SZ, na.rm = TRUE) #create new object for May
@@ -280,14 +275,17 @@ sumJul = sum(subset(df_year, IGN_Month == "Jul")$CURRENT_SZ, na.rm = TRUE) #crea
 sumAug = sum(subset(df_year, IGN_Month == "Aug")$CURRENT_SZ, na.rm = TRUE) #create new object for August
 sumSep = sum(subset(df_year, IGN_Month == "Sep")$CURRENT_SZ, na.rm = TRUE) #create new object for September
 months = c("Mar","Apr","May","Jun","Jul", "Aug", "Sep")  #Create labels for the bar graph
-
+```
+```
 png("Output_BarGraph.png") #Create an object to print the bar graph 
 barplot(c(sumMar,sumApr,sumMay, sumJun, sumJul, sumAug, sumSep), names.arg = months, 
         main = "TITLE FOR BAR GRAPH", ylab = "AXIS TITLE", xlab = "AXIS TITLE") #Create the bar graph
 dev.off() #Print bar graph
+```
 
 #Total Size by Month GGPLOT
 #LOOK FOR AND CORRECT ERRORS IN THE CODE BELOW
+```
 barGraph <- df_year %>% #store graph in bar graph variable and pass data frame as first argument in next line
   group_by(IGN_Month) %>% #use data frame and group by month and pass to first argument in next line
   summarise(sumSize = sum(CURRENT_SZ, na.rm = TRUE)) %>% #sum up the total fire size for each month and pass to GGplot
@@ -303,10 +301,13 @@ png("Output_BarGraph_GG.png")
 barGraph
 dev.off()
 
-
+```
 
 #####
 #Creating maps
+
+
+```
 bc <- as_Spatial(bc_neighbours()) #Get shp of BC bounds
 raster::crs(bc)
 bc <- spTransform(bc, CRS("+init=epsg:4326")) #project to WGS84 geographic (Lat/Long)
@@ -317,11 +318,12 @@ png("FirstMap.png")
 map(bc, fill = TRUE, col = "white", bg = "lightblue", ylim = c(40, 70)) #make map of province
 points(df_year$LONGITUDE ,df_year$LATITUDE , col = "red", pch = 16) #add fire points
 dev.off()
-
+```
 #####
 #####
 #Making Maps with tm package
 #Make spatial object (Spatial points dataframe) out of data
+```
 coords <- df_year[, c("LONGITUDE", "LATITUDE")] #Store coordinates in new object
 crs <- CRS("+init=epsg:4326") #store the coordinate system (CRS) in a new object
 
@@ -334,8 +336,9 @@ map_TM <- tm_shape(bc) + #make the main shape
   tm_layout(title = "BC Fire Locations 2020", title.position = c("LEFT", "BOTTOM"))
 
 map_TM
+```
 
-
+```
 meanCenter <- data.frame(name = "Mean Center of fire points", long = mean(df_year$LONGITUDE), lat = mean(df_year$LATITUDE))
 
 coords2 <- meanCenter[, c("long", "lat")]
@@ -356,9 +359,9 @@ map_TM
 png("TmMap.png")
 map_TM
 dev.off()
+```
 
 
-#How would you calculate the mean center point location and add it to a map?
 
 
 
