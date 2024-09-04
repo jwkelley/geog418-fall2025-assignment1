@@ -120,39 +120,38 @@ You are now ready to calculate statistics.
 
 _Mean_
 ```
-meanPop <- mean(df_year$CURRENT_SZ)
-meanSummer <- mean(df_Summer$CURRENT_SZ)
+meanPop <- mean(df_year$VARIABLE)
+meanSummer <- mean(df_Summer$VARIABLE)
 ```
 _Standard Deviation_
 ```
-sdPop <- sd(df_year$CURRENT_SZ, na.rm = TRUE) 
-sdSummer <- sd(df_Summer$CURRENT_SZ, na.rm = TRUE) 
+sdPop <- sd(df_year$VARIABLE, na.rm = TRUE) 
+sdSummer <- sd(df_Summer$VARIABLE, na.rm = TRUE) 
 ```
 
 _Mode_
 ```
-#Mode
-modePop <- as.numeric(names(sort(table(df_year$CURRENT_SZ), decreasing = TRUE))[1]) 
-modeSummer <- as.numeric(names(sort(table(df_Summer$CURRENT_SZ), decreasing = TRUE))[1])
+modePop <- as.numeric(names(sort(table(df_year$VARIABLE), decreasing = TRUE))[1]) 
+modeSummer <- as.numeric(names(sort(table(df_Summer$VARIABLE), decreasing = TRUE))[1])
 ```
 Note: This code makes a frequency table of fire size variable and sorts it in desending order and extract the first row (i.e. the most frequent value)
 
 _Median_
 ```
-medPop <- median(df_year$CURRENT_SZ, na.rm = TRUE)
-medSummer <- median(df_Summer$CURRENT_SZ, na.rm = TRUE)
+medPop <- median(df_year$VARIABLE, na.rm = TRUE)
+medSummer <- median(df_Summer$VARIABLE, na.rm = TRUE)
 ```
 
 _Skewness_
 ```
-skewPop <- skewness(df_year$CURRENT_SZ, na.rm = TRUE)[1]
-skewSummer <- skewness(df_Summer$CURRENT_SZ, na.rm = TRUE)[1]
+skewPop <- skewness(df_year$VARIABLE, na.rm = TRUE)[1]
+skewSummer <- skewness(df_Summer$VARIABLE, na.rm = TRUE)[1]
 ```
 
 _Kurtosis_
 ```
-kurtPop <- kurtosis(df_year$CURRENT_SZ, na.rm = TRUE)[1]
-kurtSummer <- kurtosis(df_Summer$CURRENT_SZ, na.rm = TRUE)[1]
+kurtPop <- kurtosis(df_year$VARIABLE, na.rm = TRUE)[1]
+kurtSummer <- kurtosis(df_Summer$VARIABLE, na.rm = TRUE)[1]
 ```
 
 _Coefficient of Variation___
@@ -163,8 +162,8 @@ CoVSummer <- (sdSummer / meanSummer) * 100
 
 _Normal Distribution Test_
 ```
-normPop_PVAL <- shapiro.test(df_year$CURRENT_SZ)$p.value
-normSummer_PVAL <- shapiro.test(df_Summer$CURRENT_SZ)$p.value
+normPop_PVAL <- shapiro.test(df_year$VARIABLE)$p.value
+normSummer_PVAL <- shapiro.test(df_Summer$VARIABLE)$p.value
 ```
 
 ### Creating a Table for Your Results
@@ -261,8 +260,8 @@ dev.off()
 
 The text below creates a simple histogram following the same process as making a table that is described above. First an empty png file is create, next a histogram is created from your data (the example below includes some extra parameters for the histogram design), and finally printing the histogram to the png file. Examine the code and try to understand what the various components do.
 ```
-png("Output_Histogram.png")
-hist(df_year$CURRENT_SZ, breaks = 30, main = "Frequency of Wild Fire Sizes", xlab = "Size of Wild Fire (ha)") #Base R style
+png("Output_Histogram.pngg")
+hist(df_year$VARIABLE, breaks = 30, main = "Frequency of Wild Fire Sizes", xlab = "Size of Wild Fire (ha)") #Base R style
 dev.off()
 ```
 
@@ -271,13 +270,13 @@ dev.off()
 
 Next, we will create a bar graph showing the sum of wildfires in each month. The first step is to create a new object for each month and then assigning the sum of fires to that object. In addition, the last line of code creates a set of labels for the x-axis of the graph.
 ```
-sumMar = sum(subset(df_year, IGN_Month == "Mar")$CURRENT_SZ, na.rm = TRUE) 
-sumApr = sum(subset(df_year, IGN_Month == "Apr")$CURRENT_SZ, na.rm = TRUE) 
-sumMay = sum(subset(df_year, IGN_Month == "May")$CURRENT_SZ, na.rm = TRUE) 
-sumJun = sum(subset(df_year, IGN_Month == "Jun")$CURRENT_SZ, na.rm = TRUE) 
-sumJul = sum(subset(df_year, IGN_Month == "Jul")$CURRENT_SZ, na.rm = TRUE) 
-sumAug = sum(subset(df_year, IGN_Month == "Aug")$CURRENT_SZ, na.rm = TRUE) 
-sumSep = sum(subset(df_year, IGN_Month == "Sep")$CURRENT_SZ, na.rm = TRUE) 
+sumMar = sum(subset(df_year, IGN_Month == "Mar")$VARIABLE, na.rm = TRUE) 
+sumApr = sum(subset(df_year, IGN_Month == "Apr")$VARIABLE, na.rm = TRUE) 
+sumMay = sum(subset(df_year, IGN_Month == "May")$VARIABLE, na.rm = TRUE) 
+sumJun = sum(subset(df_year, IGN_Month == "Jun")$VARIABLE, na.rm = TRUE) 
+sumJul = sum(subset(df_year, IGN_Month == "Jul")$VARIABLE, na.rm = TRUE) 
+sumAug = sum(subset(df_year, IGN_Month == "Aug")$VARIABLE, na.rm = TRUE) 
+sumSep = sum(subset(df_year, IGN_Month == "Sep")$VARIABLE, na.rm = TRUE) 
 months = c("Mar","Apr","May","Jun","Jul", "Aug", "Sep") h
 ```
 
@@ -294,7 +293,7 @@ You can create an advanced bar graph by using the the popular ggplot library. Th
 ```
 barGraph <- df_year %>% #store graph in bar graph variable and pass data frame as first argument in next line
   group_by(IGN_Month) %>% #use data frame and group by month and pass to first argument in next line
-  summarise(sumSize = sum(CURRENT_SZ, na.rm = TRUE)) %>% #sum up the total fire size for each month and pass to GGplot
+  summarise(sumSize = sum(VARIABLE, na.rm = TRUE)) %>% #sum up the total fire size for each month and pass to GGplot
   ggplot(aes(x = IGN_Month, y = sumSize)) + #make new GGPLOT with summary as data and month and total fire size as x and y
   geom_bar(stat = "identity") + #make bar chart with the Y values from the data (identity)
   labs(title = "Total Burned Area by Month 2020", x = "Month", y = "Total Burned Area (ha)", caption = "Figure 2: Total fire size by month in 2020") + #label plot, x axis, y axis
@@ -340,7 +339,7 @@ map_TM <- tm_shape(bc) + #make the main shape
   tm_symbols(col = "red", alpha = 0.3) +
   tm_layout(title = "BC Fire Locations 2020", title.position = c("LEFT", "BOTTOM"))
 
-map_TM
+map_T
 ```
 
 
@@ -364,10 +363,10 @@ map_TM <- tm_shape(bc) +
   tm_add_legend(type = "symbol", labels = c("Fire Points", "Mean Center"), col = c(adjustcolor( "red", alpha.f = 0.3), adjustcolor( "blue", alpha.f = 0.8)), shape = c(19,19)) +
   tm_layout(title = "BC Fire Locations 2020", title.position = c("LEFT", "BOTTOM"), legend.position = c("RIGHT", "TOP"))
 
-map_TM
+map_RM
 
 png("TmMap.png")
-map_TM
+map_RM
 dev.off()
 ```
 
