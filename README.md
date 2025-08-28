@@ -1,5 +1,5 @@
-# Geog 418 Fall 2024 - Assignment 1
-All assignments for this course will be completed in the coding language R. There are two software that you will need to install: (1) [R version 4.4.1](https://www.r-project.org/), and (2) [R Studio version 2024.04.2](https://posit.co/download/rstudio-desktop/). R is an open-source programming language fpr statistical analysis, while R Studio is the graphical user interface that provides you with editing and visualization capabilities. You can visit the video in the Read Me First Page on the course Brightspace site to learn how to download these software. 
+# Geog 418 Fall 2025 - Assignment 1
+All assignments for this course will be completed in the coding language R. There are two software that you will need to install: (1) [R version 4.5.1](https://muug.ca/mirror/cran/), and (2) [R Studio version 2025.05.1-513](https://posit.co/download/rstudio-desktop/). R is an open-source programming language for statistical analysis, while R Studio is the graphical user interface that provides you with editing and visualization capabilities. You can visit the video in the Read Me First Page on the course Brightspace site to learn how to download these software. 
 
 R operates by running through lines of code that a user (e.g. you) creates. Like all languages, R is sensitive to spelling, upper/lower cases, and punctuation, so it is best to approach your coding in a slow and deliberate manner to ensure that you are not making any mistakes. In addition to code, you can enter comments in R that serve as plain text for explaining what the code is suppose to do.
 
@@ -8,14 +8,19 @@ There are really only three basic elements to coding.
 2. variables: each object can have multiple variables that describe something about it. For example, if the object is a list of trees, the variable could be height
 3. functions: a function is applied to do something to an object or a variable. For example, the function "mean" would return the average height of all the trees in your list. Functions can be short and simple or they can be very long and confusing. Sometimes we will ignore some of the elements of a function and just focus on the essentials.
 
-Whatever your experience is with coding, please have the confidence that will learn some new skills and will walk away from this course with a new or polished tool in your analytical toolbelt. You can do it, we can help. Let's get started with Assignment 1.
+Whatever your experience is with coding, please have the confidence that you will learn some new skills and will walk away from this course with a new or polished toolset in your analytical toolbelt. You can do it, we can help. Let's get started with Assignment 1.
 
 
 ## Instructions
 ### Installing Packages
 Open R Studio and create a new project and give it an appropriate name (e.g. Geog418_Assignment_1). You should see multiple panels in the interface. The top-left panel is where you create and save your code. When you run your code you will see it being executed in the bottom-left panel. Any outputs are shown in the Plots panel on the right.
 
-R has many generic functions that are built into its main download "package". However, most often you will want to use a specific function that is part of some specific package that does not come with the main download, and so you will need to install these packages onto your machine. Here is a list of packages that you will need to install for this assignment. Copy and paste this code into your R Studio editor panel. Highlight the code and select "Run"
+R has many generic functions that are built into its base "package". However, most often you will want to use a specific function that is part of a specific package that is seperate from the base package. In this case you will need to install these packages onto your machine. Below is a list of packages that you will need to install for this assignment. Copy and paste this code into your R Studio editor panel. If your R Studio does not automatically open with a editor panel, you can open one with the 'New File' <img width="44" height="21" alt="image" src="https://github.com/user-attachments/assets/9788d843-b96b-4127-af54-27a8ef392dc3" />
+button, and selecting 'R Script'.
+
+
+Once you have pasted the code below into the editor you need to run it. Highlight the code and either click on the "Run" button <img width="58" height="27" alt="image" src="https://github.com/user-attachments/assets/4920d5e9-4848-4c65-8c28-ae713693eec8" /> or use ctrl + enter (windows)/ cmd + enter (mac) to execute the selected code.
+
 
 ```
 install.packages("terra")
@@ -23,16 +28,31 @@ install.packages("lubridate")
 install.packages("e1071")
 install.packages("gridExtra")
 install.packages("gtable")
-install.packages("grid")
 install.packages("ggplot2")
 install.packages("dplyr")
 install.packages("bcmaps")
 install.packages("tmap")
 install.packages("sf")
 ```
-You will see all the packages being installed in the execution panel. Note that you will only need to install packages once on your machine.
+You will see all the packages being installed in the execution panel, keep an eye out for any major errors (warnings are often ok). 
 
-Next, you will need to activate these packages by calling them into a "library". This step will need to be done each time you open R for your assignment. 
+Note that you will only need to install packages once on your machine. After you have installed them successfully you can comment out the lines by adding a '#' to the start of each line. If you want to do multiple rows at once, you can highlight the rows you want to comment out and press ctrl + shift + c (windows) / cmd + shift + c (mac).
+```
+# install.packages("terra")
+# install.packages("lubridate")
+# install.packages("e1071")
+# install.packages("gridExtra")
+# install.packages("gtable")
+# install.packages("grid")
+# install.packages("ggplot2")
+# install.packages("dplyr")
+# install.packages("bcmaps")
+# install.packages("tmap")
+# install.packages("sf")
+```
+
+Next, you will need to activate these packages by calling them into a "library". This step will need to be done each time you open a new R session (opening RStudio for the first time or restarting). 
+
 ```
 library("terra")
 library("lubridate")
@@ -44,75 +64,98 @@ library("ggplot2")
 library("dplyr")
 library("bcmaps")
 library("raster")
-library("maps")
 library("tmap")
 ```
 
 ### Opening and Reading Data
-R needs to know where to get data from. We call the location of where your files are stored (and where your outputs will be stored) the "working directory". Here we are going to create an object called "dir" and assign it our working directory. We use the <- symbol whenever we are assigning something to an object or variable. "setwd(dir)" is a function that assigns our pathname to "dir", and "getwd()" will print our working directory in the execution panel so that we can make sure it is correct.
+R needs to know where to get your data from. We call the location of where your files are stored (and where your outputs will be stored) the file path. Once you point R to a specific file path it is known as the "working directory". Here we are going to create an object called "dir" and assign it our working directory. We use the <- symbol whenever we are assigning something to an object or variable. "setwd(dir)" is a function that assigns our file path (stored in the object "dir") as the working directory. Alternativly, "getwd()" will print our working directory in the execution panel so that we can make sure it is correct.
 ```
-dir <- "C:/Users/Chris/OneDrive - University of Victoria/Courses/Geog 418 Spatial Analysis/2024/Assignment 1"
+dir <- "C:/Users/Jason/OneDrive - University of Victoria/Geog418_202509/A1/"
 setwd(dir)
 getwd()
 ```
-*Note: it is good practice to save and run your code each time you add a line or a section of code. This way you can make sure that each chunk of code is working appropriately. 
+*Note: it is good practice to save and run your code each time you add a line or a section of code. This way you can make sure that each new piece of code is working appropriately. 
 
-Next, you will read in the shapefile of wildfires that you downloaded from the BC Data Catalogue. You are going to create an object called "shp", and use the function "vect" to create a vector dataset in R of this shapefile. Be sure to use the same punctuation in the filename below.
+Next, you will read in the shapefile of wildfires that you downloaded from the BC Data Catalogue. You are going to create an object called "shp", and use the function "read_sf()" to create a vector dataset in R of this shapefile. Be sure to use the same punctuation in the filename below.
 ```
-shp <- vect("./prot_current_fire_points.shp") #read in shp file from current (".") working directory
+shp <- read_sf("./H_FIRE_PNT_point.shp") #read in shp file from current (".") working directory
 ```
-Shapefiles are clunky files to work with in R, so a common practice is to transform it to a file class called a dataframe. This is a very common data class to work with in R. You should be able to understand from the code below that we are creating a new object called "df" and assigning our vector shapefile as a dataframe to this object. We call also make sure it is a dataframe by asking R to tell us what class it is.
+Sometimes we don't need all of the extra spatial information included with a Shapefile, so a common practice is to transform it to a file class called a dataframe. This is a very common data class to work with in R. Looking at the code below you will see that we are using the st_drop_geometry() function with the shp object to remove the spatial information. The result of this function is then used inside the as.data.frame() function to ensure what ends up in the df object is a data frame class as we intended. We call also make sure it is a dataframe by asking R to tell us what class it is.
 
 ```
-df <- as.data.frame(shp) 
+df <- as.data.frame(st_drop_geometry(shp)) 
 class(df)
 ```
 
 ### Inspecting and Preparing the Data
-There are several quick tools for exploring your data, which is especially handy since we cannot necessarily see the dataset like we can in a software like Excel or ArcGIS. The "name" and "head" functions allow us to see the name of the columns and the first six rows of the dataset, respectively.
+There are several handy functions for doing checks and exploring your data, which is especially handy since we cannot necessarily see the dataset like we can in a software like Excel or ArcGIS. The "name" and "head" functions allow us to see the name of the columns and the first six rows of the dataset, respectively.
 
 ```
 names(df) 
 head(df) 
 ```
-You can see what is the data type of each column (i.e. variable in the dataset). The "typeof" function is applied to the ignition date of the fire (the IGNITIT_DT column) in the df dataframe. The "range" function below looks at the FIRE_YEAR column and gets the range of years in the data. It should be clear that the "$" symbol indicates that IGNITN_DT is from the dataframe df.
+
+You can also see what the data type is for each column (i.e. variable in the dataset). Below, the typeof() function is applied to the ignition date of the fire (the IGN_DATE column) in the df object. The range() function looks at the FIRE_YEAR column and gets the range of years in the data. It should be clear that the "$" symbol indicates that we are referring to specific columns within the df object (IGN_DATE & FIRE_YEAR).
+
 ```
-typeof(df$IGNITN_DT) 
+typeof(df$IGN_DATE)
 range(df$FIRE_YEAR)
 ```
-_What is the data type of the IGNITIN_DT column?_
+
+_What is the data type of the IGN_DATE column?_
+
 _What is the range of years in the dataset?_
 
 
-You will see that there are multiple years of data in this dataset. For this assignment you only want to use data for 2024. In the code below I use data for 2023; you need to make sure to change this for 2024. The code takes "df" and assigns it a subset of the data based on the fire year.
+You will see that there are multiple years of data in this dataset. For this assignment you only want to use data for 2017 and 2023. In the code below I use data for 2017; you need to copy this code and make appropriate changes to also get this for 2023. The code takes "df" and assigns it a subset of the data based on the fire year.
 
 ```
-df <- subset(df, df$FIRE_YEAR == 2023)
+df_17 <- subset(df, df$FIRE_YEAR == 2017)
 ```
-You are going to compute descriptive statistics on the entire 2024 season as well as just the summer months (more on the summer months below). Therefore, we need to know what day and month each fire took place. Unfortunately, the date of the fire ignition is stored as a single string; we want to create an object for the Day, Month, and Year of each fire. To do this, we will first make sure that our INIGNITN_DT columns is in a Date format, then create a new column for each of these three variables and extract the appropriate information to fill these new columns. Try to read through the code to see if you can make sense of what is happening.
+You are going to compute descriptive statistics on both the 2017 and 2023 seasons for just the main wildfire season (April through October). Therefore, we need to know what day and month each fire took place. Unfortunately, the date of the fire ignition is stored as a single character string; we want to create a variable for the Day, Month, and Year of each fire. To do this, we will first make sure that our IGN_DATE columns are in a Date format, then create a new column for each of these three variables and extract the appropriate information to fill these new columns. Try to read through the code to see if you can make sense of what is happening and then repeat it for the 2023 data.
 
 ```
-df$IGNITN_DT<- as.Date(df$IGNITN_DT, format = "%Y/%m/%d")
-df$IGN_Day <- yday(df$IGNITN_DT) 
-df$IGN_Month <- month(df$IGNITN_DT, label = TRUE, abbr = TRUE) 
-df$IGN_Year <- year(df$IGNITN_DT) 
+df_17$IGN_DATE <- as.Date(df_17$IGN_DATE, format = "%Y%m%d")
+df_17$IGN_DAY <- yday(df_17$IGN_DATE) 
+df_17$IGN_MONTH <- month(df_17$IGN_DATE, label = TRUE, abbr = TRUE) 
+df_17$IGN_YEAR <- year(df_17$IGN_DATE) 
 ```
-Now you can change the range of days and years, and see what months are included in the dataset. 
+Now you can check the range of days and years, and see what is included in each dataset.
 
 ```
-range(df$IGN_Day) 
-unique(df$IGN_Month) 
-range(df$IGN_Year)
+range(df_17$IGN_DAY) 
+unique(df_17$IGN_MONTH) 
+range(df_17$IGN_YEAR)
 ```
+
 _What do all these outputs refer to?_
 
-We are now going to create two separate dataframes in order to be able to compare fires from across 2024 to fires during the summer months of 2024. First we create one for the year.
+You may notice that some of these checks returned values you were not expecting, this indicates that some rows have not been filtered out properly. First start by removing any rows that do not have a valid IGN_DATE. These will be the rows that show an NA value for IGN_DATE. In the code below we use the subset() function to remove the NA rows from the df_17 object by using the is.na() function to identify all the NA rows. Note that the '!' symbol indicates 'not', so in combination the is.na() function identifies rows with NA and the '!' symbol switches it to identify all the 'not-NA' rows.
+
 ```
-df_year <- df[which(df$IGN_Year == 2023),] 
+df_17 <- subset(df_17, !is.na(df_17$IGN_DATE))
 ```
-Then we create one for only the summer months. Here we use the day of the year (Jan 1 = 1 and December 31 = 365).
+
+If you repeat your checks you should find that some have changed.
+
 ```
-df_Summer <- subset(df, IGN_Day >= 182 & IGN_Day <= 243) #Make new variable to hold summer data
+range(df_17$IGN_DAY) 
+unique(df_17$IGN_MONTH) 
+range(df_17$IGN_YEAR)
+```
+
+While we no longer have NA show up for IGN_DAY and IGN_YEAR it appears that the Year column includes more than our intended year. You can clean that up in a similar way.
+
+```
+df_17 <- subset(df_17, df_17$IGN_YEAR == 2017))
+```
+
+At this point you should make sure that both the 2017 data and 2023 data have been cleaned up and contain only valid dates for their respective years
+
+We are now going to subset to only the main fire season (April 1 through October 31) in order to compare fires between seasons. Note that the data in the IGN_DAY column refers to day of the year so April 1 is day 91 and October 31 is day 304.
+
+```
+df_17 <- subset(df_17, df_17$IGN_DAY >= 91 & df_17$IGN_DAY <= 304)
 ```
 
 ### Calculating Statistics
@@ -120,50 +163,50 @@ You are now ready to calculate statistics.
 
 _Mean_
 ```
-meanPop <- mean(df_year$VARIABLE)
-meanSummer <- mean(df_Summer$VARIABLE)
+mean_17 <- mean(df_17$VARIABLE)
+mean_23 <- mean(df_23$VARIABLE)
 ```
 _Standard Deviation_
 ```
-sdPop <- sd(df_year$VARIABLE, na.rm = TRUE) 
-sdSummer <- sd(df_Summer$VARIABLE, na.rm = TRUE) 
+sd_17 <- sd(df_17$VARIABLE, na.rm = TRUE) 
+sd_23 <- sd(df_23$VARIABLE, na.rm = TRUE) 
 ```
 
 _Mode_
 ```
-modePop <- as.numeric(names(sort(table(df_year$VARIABLE), decreasing = TRUE))[1]) 
-modeSummer <- as.numeric(names(sort(table(df_Summer$VARIABLE), decreasing = TRUE))[1])
+mode_17 <- as.numeric(names(sort(table(df_17$VARIABLE), decreasing = TRUE))[1]) 
+mode_23 <- as.numeric(names(sort(table(df_23$VARIABLE), decreasing = TRUE))[1])
 ```
 Note: This code makes a frequency table of fire size variable and sorts it in desending order and extract the first row (i.e. the most frequent value)
 
 _Median_
 ```
-medPop <- median(df_year$VARIABLE, na.rm = TRUE)
-medSummer <- median(df_Summer$VARIABLE, na.rm = TRUE)
+med_17 <- median(df_17$VARIABLE, na.rm = TRUE)
+med_23 <- median(df_23$VARIABLE, na.rm = TRUE)
 ```
 
 _Skewness_
 ```
-skewPop <- skewness(df_year$VARIABLE, na.rm = TRUE)[1]
-skewSummer <- skewness(df_Summer$VARIABLE, na.rm = TRUE)[1]
+skew_17 <- skewness(df_17$VARIABLE, na.rm = TRUE)[1]
+skew_23 <- skewness(df_23$VARIABLE, na.rm = TRUE)[1]
 ```
 
 _Kurtosis_
 ```
-kurtPop <- kurtosis(df_year$VARIABLE, na.rm = TRUE)[1]
-kurtSummer <- kurtosis(df_Summer$VARIABLE, na.rm = TRUE)[1]
+kurt_17 <- kurtosis(df_17$VARIABLE, na.rm = TRUE)[1]
+kurt_23 <- kurtosis(df_23$VARIABLE, na.rm = TRUE)[1]
 ```
 
 _Coefficient of Variation___
 ```
-CoVPop <- (sdPop / meanPop) * 100
-CoVSummer <- (sdSummer / meanSummer) * 100
+CoV_17 <- (sd_17 / mean_17) * 100
+CoV_23 <- (sd_23 / mean_23) * 100
 ```
 
 _Normal Distribution Test_
 ```
-normPop_PVAL <- shapiro.test(df_year$VARIABLE)$p.value
-normSummer_PVAL <- shapiro.test(df_Summer$VARIABLE)$p.value
+norm_17_PVAL <- shapiro.test(df_17$VARIABLE)$p.value
+norm_23_PVAL <- shapiro.test(df_23$VARIABLE)$p.value
 ```
 
 ### Creating a Table for Your Results
