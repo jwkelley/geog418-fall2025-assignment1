@@ -1,12 +1,12 @@
 # Geog 418 Fall 2025 - Assignment 1
-All assignments for this course will be completed in the coding language _R_. There are two software that you will need to install: (1) [R version 4.5.1](https://muug.ca/mirror/cran/), and (2) [R Studio version 2025.05.1-513](https://posit.co/download/rstudio-desktop/). _R_ is an open-source programming language for statistical analysis, while R-Studio is the graphical user interface that provides you with editing and visualization capabilities. You can visit the video in the Read Me First Page on the course Brightspace site to learn how to download these software. 
+All assignments for this course will be completed in the coding language _R_. There are two software that you will need to install: (1) [R version 4.5.1](https://muug.ca/mirror/cran/), and (2) [R Studio version 2025.05.1-513](https://posit.co/download/rstudio-desktop/). _R_ is an open-source programming language for statistical analysis, while R-Studio is the graphical user interface that provides you with editing and visualization capabilities. You can visit the video in the R-Resources section on the course Brightspace site to learn how to download these software. 
 
 _R_ operates by running through lines of code that a user (e.g. you) creates. Like all languages, _R_ is sensitive to spelling, upper/lower cases, and punctuation, so it is best to approach your coding in a slow and deliberate manner to ensure that you are not making any mistakes. In addition to code, you can enter comments in R that serve as plain text for explaining what the code is suppose to do.
 
 There are really only three basic elements to coding. 
 1. **Objects**: this is the thing that you are doing something to with your code. It could be a number, a name, or a dataset (amongst other things)
-2. **Variables**: each object can have multiple variables that describe something about it. For example, if the object is a list of trees, the variable could be height
-3. **Functions**: a function is applied to do something to an object or a variable. For example, the function mean() would return the average height of all the trees in your list. Functions can be short and simple or they can be very long and confusing. Sometimes we will ignore some of the elements of a function and just focus on the essentials.
+2. **Variables**: each object can have multiple variables that describe something about it. For example, if the object is a list of trees, one variable could be height
+3. **Functions**: a function is applied to do something to an object or a variable. For example, the function ```mean()``` would return the average height of all the trees in your list. Functions can be short and simple or they can be very long and confusing. Sometimes we will ignore some of the elements of a function and just focus on the essentials.
 
 Whatever your experience is with coding, please have the confidence that you will learn some new skills and will walk away from this course with a new or polished toolset in your analytical toolbelt. You can do it, and we are here to help. Let's get started with Assignment 1.
 
@@ -15,7 +15,7 @@ Whatever your experience is with coding, please have the confidence that you wil
 Open R Studio, create a new project, and give it an appropriate name (e.g. Geog418_Assignment_1). You should see multiple panels in the interface. The top-left panel is where you create and save your code. When you run your code you will see it being executed in the bottom-left panel. Any outputs are shown in the 'Plots' panel on the right.
 
 _R_ has many generic functions that are built into its base "package". However, most often you will want to use specific functions that are part of specific packages that are seperate from the base package. In this case you will need to install these packages onto your machine. Below is a list of packages that you will need to install for this assignment. Copy and paste this code into your R Studio editor panel. If your R Studio does not automatically open with a editor panel, you can open one with the 'New File' <img width="44" height="21" alt="image" src="https://github.com/user-attachments/assets/9788d843-b96b-4127-af54-27a8ef392dc3" />
-button, and selecting 'R Script'.
+button, and selecting 'R Script'. Save this file with an appropriate name (e.g. A1).
 
 Once you have pasted the code below into the editor you need to run it. Highlight the code and either click on the "Run" button <img width="58" height="27" alt="image" src="https://github.com/user-attachments/assets/4920d5e9-4848-4c65-8c28-ae713693eec8" /> or use ctrl + enter (windows)/ cmd + enter (mac) to execute the selected code.
 
@@ -30,6 +30,7 @@ install.packages("dplyr")
 install.packages("bcmaps")
 install.packages("tmap")
 install.packages("sf")
+install.packages("maps")
 ```
 You will see all the packages being installed in the execution panel, keep an eye out for any major errors (warnings are often ok). 
 
@@ -47,6 +48,7 @@ Note that you will only need to install packages once on your machine. After you
 # install.packages("bcmaps")
 # install.packages("tmap")
 # install.packages("sf")
+# install.packages("maps")
 ```
 
 Next, you will need to activate these packages by calling them into a "library". This step will need to be done each time you open a new R session (opening RStudio for the first time or restarting). You can think about the library step as opening or loading the package into your current _R_ session.
@@ -61,14 +63,14 @@ library("gridExtra")
 library("ggplot2")
 library("dplyr")
 library("bcmaps")
-library("raster")
 library("tmap")
+library("maps")
 ```
 
 ### Opening and Reading Data
 _R_ needs to know where to get your data from. We call the location of where your files are stored (and where your outputs will be stored) the file path. Once you point _R_ to a specific file path it is known as the "working directory". Here we are going to create an object called "dir" and assign it our working directory. We use the ```<-``` symbol whenever we are assigning something to an object or variable. ```setwd(dir)``` is a function that assigns our file path (stored in the object "dir") as the working directory. Alternativly, ```getwd()``` will print our working directory in the execution panel so that we can make sure it is correct.
 ```
-dir <- "C:/Users/Jason/OneDrive - University of Victoria/Geog418_202509/A1/"
+dir <- "C:/Users/Jason/OneDrive - University of Victoria/Geog418_202509/A1/Geog418_Assignment_1/"
 setwd(dir)
 getwd()
 ```
@@ -105,7 +107,7 @@ names(df)
 head(df) 
 ```
 
-You can also see what the data type is for each column (i.e. variable in the dataset). Below, the ```typeof()``` function is applied to the ignition date of the fire (the IGN_DATE column) in the df object. The ```range()``` function looks at the FIRE_YEAR column and gets the range of years in the data. It should be clear that the ```$``` symbol indicates that we are referring to specific columns within the df object (FIRE_DATE & FIRE_YEAR).
+You can also see what the data type is for each column (i.e. variable in the dataset). Below, the ```typeof()``` function is applied to the ignition date of the fire (the FIRE_DATE column) in the df object. The ```range()``` function looks at the FIRE_YEAR column and gets the range of years in the data. It should be clear that the ```$``` symbol indicates that we are referring to specific columns within the df object (FIRE_DATE & FIRE_YEAR).
 
 ```
 typeof(df$FIRE_DATE)
@@ -158,7 +160,7 @@ range(df_17$FIRE_YEAR)
 While we no longer have NA show up for FIRE_DAY and FIRE_YEAR it appears that the Year column includes more than our intended year. You can clean that up in a similar way.
 
 ```
-df_17 <- subset(df_17, df_17$FIRE_YEAR == 2017))
+df_17 <- subset(df_17, df_17$FIRE_YEAR == 2017)
 ```
 
 At this point you should make sure that both the 2017 data and 2023 data have been cleaned up and contain only valid dates for their respective years
@@ -216,10 +218,12 @@ norm_17_PVAL <- shapiro.test(df_17$VARIABLE)$p.value
 norm_23_PVAL <- shapiro.test(df_23$VARIABLE)$p.value
 ```
 
-Finally you can test if these two samples are similar, or drawn from the same population. Because your normality test and descriptive statistics likely point towards the samples being skewed and not normally distributed we will use the Kolmogorov-Smirnov (KS) test. The KS test is a non-parametric test that does not assume the samples are normally distributed. One thing to note is that the null hypothesis is looking at the entire cumulative distribution function and not just the means so you have to be careful how you interpret any directional tests you may try. Please come talk to me if you want to know more about this.
+Finally you can test if these two samples are similar, or drawn from the same population. Because your normality test and descriptive statistics likely point towards the samples being skewed and not normally distributed we will use the Kolmogorov-Smirnov (KS) test. The KS test is a non-parametric test that does not assume the samples are normally distributed, unlike the z-test. One thing to note is that the null hypothesis is looking at the entire cumulative distribution function and not just the means so you have to be careful how you interpret any directional tests you may try. Please come talk to me if you want to know more about this.
 
 ```
 ksResult <- ks.test(df_17$VARIABLE, df_23$VARIABLE, alternative = "two.sided")
+ksD <- ksResult$statistic
+ksP <- ksResult$p.value
 ```
 **Note:** You will likely get a warning about the presence of ties. You can ignore this but note that the P-value might be on the conservative side if the data have many observations with the exact same fire size, which is likely given how fire size is recorded and rounded.
 
@@ -301,6 +305,11 @@ grid.arrange(table1, newpage = TRUE)
 grid.arrange(table2, newpage = TRUE)
 ```
 
+You may have noticed that some of the large values are being returned by _R_ in scientific notation. Use this next line to force _R_ to use regular notation for the plots and axis labels going forward.
+```
+options(scipen = 999)
+```
+
 Next, we create an empty png file in our working directory, and then assign Table 1 to that png file, and then print the table by calling the ```dev.off()``` function.
 ```
 png("Output_Table1.png")
@@ -316,7 +325,7 @@ dev.off()
 
 ### Plot Your Data in a Histogram
 
-The code below creates a simple histogram following the same process for making a png as described above. First an empty png file is created, next a histogram is created from your data (the example below includes some extra parameters for the histogram design), and finally printing the histogram to the png file. Examine the code and try to understand what the various components do.
+The code below creates a simple histogram using the base _R_ graphics, following the same process for making a png as described above. First an empty png file is created, next a histogram is created from your data (the example below includes some extra parameters for the histogram design), and finally printing the histogram to the png file. Examine the code and try to understand what the various components do.
 ```
 png("Output_Histogram_17.png")
 hist(df_17$VARIABLE, breaks = 30, main = "Frequency of Wild Fire Sizes", xlab = "Size of Wild Fire (ha)") #Base R style
@@ -328,13 +337,13 @@ dev.off()
 Next, you will create a bar graph showing the sum of wildfires in each month. The first step is to create a new object for each month and then assigning the sum of fires to that object. In addition, the last line of code creates a set of labels for the x-axis of the graph.
 
 ```
-sumApr = sum(subset(df_17, FIRE_Month == "Apr")$VARIABLE, na.rm = TRUE) 
-sumMay = sum(subset(df_17, FIRE_Month == "May")$VARIABLE, na.rm = TRUE) 
-sumJun = sum(subset(df_17, FIRE_Month == "Jun")$VARIABLE, na.rm = TRUE) 
-sumJul = sum(subset(df_17, FIRE_Month == "Jul")$VARIABLE, na.rm = TRUE) 
-sumAug = sum(subset(df_17, FIRE_Month == "Aug")$VARIABLE, na.rm = TRUE) 
-sumSep = sum(subset(df_17, FIRE_Month == "Sep")$VARIABLE, na.rm = TRUE)
-sumOct = sum(subset(df_17, FIRE_Month == "Oct")$VARIABLE, na.rm = TRUE)
+sumApr = sum(subset(df_17, FIRE_MONTH == "Apr")$VARIABLE, na.rm = TRUE) 
+sumMay = sum(subset(df_17, FIRE_MONTH == "May")$VARIABLE, na.rm = TRUE) 
+sumJun = sum(subset(df_17, FIRE_MONTH == "Jun")$VARIABLE, na.rm = TRUE) 
+sumJul = sum(subset(df_17, FIRE_MONTH == "Jul")$VARIABLE, na.rm = TRUE) 
+sumAug = sum(subset(df_17, FIRE_MONTH == "Aug")$VARIABLE, na.rm = TRUE) 
+sumSep = sum(subset(df_17, FIRE_MONTH == "Sep")$VARIABLE, na.rm = TRUE)
+sumOct = sum(subset(df_17, FIRE_MONTH == "Oct")$VARIABLE, na.rm = TRUE)
 months = c("Apr","May","Jun","Jul", "Aug", "Sep", "Oct")
 ```
 
@@ -346,9 +355,9 @@ barplot(c(sumApr,sumMay, sumJun, sumJul, sumAug, sumSep, sumOct), names.arg = mo
 dev.off() 
 ```
 
-You can create an advanced bar graph by using the the popular ggplot library. This is a little more involved, and so we have provide comments in each line to explain a little more about what is going on in the code.
+You can create an advanced bar graph by using the the popular ggplot library. This is a little more involved, and so we have provided comments in each line to explain a little more about what is going on in the code.
 ```
-barGraph <- df_17 %>% #store graph in bar graph variable and pass data frame as first argument in next line
+barGraph_17 <- df_17 %>% #store graph in bar graph variable and pass data frame as first argument in next line
   group_by(FIRE_MONTH) %>% #use data frame and group by month and pass to first argument in next line
   summarise(sumSize = sum(VARIABLE, na.rm = TRUE)) %>% #sum up the total fire size for each month and pass to GGplot
   ggplot(aes(x = FIRE_MONTH, y = sumSize)) + #make new GGPLOT with summary as data and month and total fire size as x and y
@@ -357,23 +366,23 @@ barGraph <- df_17 %>% #store graph in bar graph variable and pass data frame as 
   theme_classic() + #set the theme to classic (removes background and borders etc.)
   theme(plot.title = element_text(face = "bold", hjust = 0.5), plot.caption = element_text(hjust = 0.5)) #set title to center and bold
 
-barGraph
+barGraph_17
 ```
 When you use the ```ggplot()``` function you can also use the ```ggsave()``` function to output the plot. This function gives some more control into how the figure is saved.
 
 ```
-ggsave("./Output_Bargraph_GG_17.png", plot = barGraph,
+ggsave("./Output_Bargraph_GG_17.png", plot = barGraph_17,
        width = 6, height = 5, units = "in", dpi = 300)
 ```
 
-Repeat these steps for 2023 such that when you are finished you have for both 2017 and 2020 a histogram and a bargraph. You may use either the base R or ggplot version, whichever you prefer.
+Repeat these steps for 2023 such that when you are finished you have for both 2017 and 2023 a histogram and a bargraph. You may use either the base R or ggplot version, whichever you prefer.
 
 ### Creating Maps
 Now we get to the fun but complex part of all the coding. Making maps is not an easy task in _R_ as there are multiple key steps that go into preparing the data into a spatial format that can be accurately mapped. Again, we provide some comments to help explain what the code is doing, but you are not expected to understand how everything works.
 
 ```
 bc <- bc_neighbours() #Get shapefile of BC boundary
-st_crs(bc)
+st_crs(bc) #Check the coordinate system
 bc <- st_transform(bc, st_crs("EPSG:4326")) #Project your data to WGS84 geographic (Lat/Long)
 bc <- bc[which(bc$name == "British Columbia" ),] #Extract just the BC province
 
@@ -395,43 +404,43 @@ firePoints <- st_as_sf(df_17, coords = c("center_X", "center_Y"), crs = 4326) #M
 
 Next we create the map.
 ```
-map_TM <- tm_shape(bc) + #make the main shape
+map_TM_17 <- tm_shape(bc) + #make the main shape
   tm_fill(col = "gray50") +  #fill polygons
   tm_shape(firePoints) +
   tm_symbols(fill = "red", fill_alpha = 0.3, size = 0.5) +
   tm_title("BC Fire Locations 2017", position = c("LEFT", "BOTTOM"))
 
-map_TM
+map_TM_17
 ```
 
 ### Calculating and Adding the Mean Centre to a Map
 This is a complex task, but by now you should be able to make sense of what the code is doing (at least at a very general level). Follow the steps below to add the mean centre to your map and try your best to explain what each line of code is doing.
 
 ```
-meanX <- mean(df_17$center_X)
-meanY <- mean(df_17$center_Y)
-meanCenter <- data.frame(Name = "Mean Center", X_coord = meanX, Y_coord = meanY)
-meanCenterPoint <- st_as_sf(meanCenter, coords = c("X_coord", "Y_coord"), crs = 4326)
+meanX_17 <- mean(df_17$center_X)
+meanY_17 <- mean(df_17$center_Y)
+meanCenter_17 <- data.frame(Name = "Mean Center", X_coord = meanX_17, Y_coord = meanY_17)
+meanCenterPoint_17 <- st_as_sf(meanCenter_17, coords = c("X_coord", "Y_coord"), crs = 4326)
 
-map_TM2 <- tm_shape(bc) + #make the main shape
+map_TM2_17 <- tm_shape(bc) + #make the main shape
   tm_fill(col = "gray50") +  #fill polygons
-  tm_shape(firePoints) +
+  tm_shape(firePoints_17) +
   tm_symbols(fill = "red", fill_alpha = 0.3, size = 0.5) +
-  tm_shape(meanCenterPoint) +
+  tm_shape(meanCenterPoint_17) +
   tm_symbols(fill = "blue", fill_alpha = 0.8, size = 1) +
   tm_add_legend(type = "symbols",
                 labels = c("Fire Points", "Mean Center"),
                 fill = c(adjustcolor("red", alpha.f = 0.3),
-                        adjustcolor("blue", alpha.f = 0.8)),
+                         adjustcolor("blue", alpha.f = 0.8)),
                 shape = c(19,19),
                 position = c("RIGHT", "TOP")) +
   tm_title("BC Fire Locations 2017", position = c("LEFT", "BOTTOM"))
 
-
-map_TM2
-tmap_save(map_TM2,
+map_TM2_17
+tmap_save(map_TM2_17,
           "./Output_Map_TM_17.png",
           width = 6, height = 5, units = "in", dpi = 300)
 ```
+Repeat this so you have a final map for 2023 that shows the fire locations and the mean centre.
 
 That's it! Congratulations on completing the tasks for generating the results for Assignment 1. You now need to take your outputs and present them in a document using the guidelines specified in the Assignment 1 page in Brightspace.
